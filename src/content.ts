@@ -14,8 +14,8 @@ export const agentNodes = [
     id: "context",
     label: "Contexto",
     tag: "01 / INPUT",
-    x: 18,
-    y: 47,
+    x: 5.95,
+    y: 39,
     description:
       "Toda boa conversa começa com contexto: intenção, histórico e regras de negócio.",
   },
@@ -23,8 +23,8 @@ export const agentNodes = [
     id: "knowledge",
     label: "Conhecimento",
     tag: "02 / RAG",
-    x: 52,
-    y: 18,
+    x: 23.1,
+    y: 17.3,
     description:
       "RAG e memória conectam o agente ao conhecimento necessário para cada jornada.",
   },
@@ -33,7 +33,7 @@ export const agentNodes = [
     label: "Agente",
     tag: "03 / REASONING",
     x: 50,
-    y: 48,
+    y: 9.1,
     description:
       "System prompts e orquestração transformam contexto em decisões e próximos passos.",
   },
@@ -41,8 +41,8 @@ export const agentNodes = [
     id: "tools",
     label: "Ferramentas",
     tag: "04 / TOOL CALLING",
-    x: 82,
-    y: 44,
+    x: 76.9,
+    y: 17.3,
     description:
       "APIs, MCP e workflows permitem que a conversa execute ações nos sistemas.",
   },
@@ -50,8 +50,8 @@ export const agentNodes = [
     id: "handoff",
     label: "Handoff",
     tag: "05 / ROUTING",
-    x: 62,
-    y: 78,
+    x: 94.05,
+    y: 39,
     description:
       "O contexto acompanha a conversa quando outro agente assume uma etapa especializada.",
   },

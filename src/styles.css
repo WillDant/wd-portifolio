@@ -117,7 +117,11 @@ summary {
   display: flex;
   align-items: center;
 }
-.brand > span:first-child,
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
 .footer-wordmark > span {
   color: var(--accent);
   font-size: 29px;
@@ -351,7 +355,7 @@ summary {
 }
 .system-canvas {
   position: relative;
-  aspect-ratio: 640/570;
+  aspect-ratio: 640/660;
   width: 100%;
   color: var(--accent);
 }
@@ -376,7 +380,7 @@ summary {
 .system-globe {
   position: absolute;
   left: 50%;
-  top: 50.4%;
+  top: 54.5%;
   width: 86%;
   transform: translate(-50%, -50%);
   z-index: 0;
@@ -389,7 +393,7 @@ summary {
 }
 .outer-orbit {
   opacity: 0.18;
-  transform-origin: 320px 287px;
+  transform-origin: 320px 360px;
   animation: orbit 120s linear infinite;
 }
 .network-lines {
@@ -464,6 +468,10 @@ summary {
 }
 .core-node .node-label {
   top: calc(100% + 6px);
+}
+.agent-node.label-above .node-label {
+  top: auto;
+  bottom: 100%;
 }
 .agent-node:hover .node-icon,
 .agent-node.is-selected .node-icon {
@@ -1784,8 +1792,9 @@ h2 {
   .brand {
     font-size: 30px;
   }
-  .brand > span:first-child {
-    font-size: 24px;
+  .brand-mark {
+    width: 34px;
+    height: 34px;
   }
   .desktop-nav {
     display: none;

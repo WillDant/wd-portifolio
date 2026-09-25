@@ -51,6 +51,13 @@ const globeArcs: Arc[] = [
   { id: "sp-lon", from: saoPaulo, to: [51.5074, -0.1278] },
   { id: "sp-sf", from: saoPaulo, to: [37.7749, -122.4194] },
 ];
+// Arcos da órbita entre nós vizinhos (viewBox 640x660, centro 320,360, r 300)
+const orbitPaths = [
+  "M38.1 257.4A300 300 0 0 1 147.9 114.3",
+  "M147.9 114.3A300 300 0 0 1 320 60",
+  "M320 60A300 300 0 0 1 492.1 114.3",
+  "M492.1 114.3A300 300 0 0 1 601.9 257.4",
+];
 const globeBase: [number, number, number] = [0.16, 0.18, 0.12];
 const globeAccent: [number, number, number] = [0.9, 1, 0.53];
 const globeGlow: [number, number, number] = [0.18, 0.21, 0.12];
@@ -118,7 +125,16 @@ function Header() {
           aria-label="Willian Dantas, início"
           onClick={() => setOpen(false)}
         >
-          wd<span>↗</span>
+          <svg className="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="16" fill="#111210" />
+            <path
+              d="M12 24l6 20 7-13 7 13 6-20m12-10v30h-6a10 10 0 1 1 6-18"
+              fill="none"
+              stroke="#e6ff88"
+              strokeWidth="4"
+              strokeLinejoin="round"
+            />
+          </svg>
           <span className="brand-caption">
             WILLIAN
             <br />
@@ -206,25 +222,22 @@ function AgentSystem() {
         </div>
         <svg
           className="system-wires"
-          viewBox="0 0 640 570"
+          viewBox="0 0 640 660"
           fill="none"
           aria-hidden="true"
         >
           <circle
             className="outer-orbit"
             cx="320"
-            cy="287"
-            r="278"
+            cy="360"
+            r="300"
             stroke="currentColor"
             strokeDasharray="2 12"
           />
           <g className="network-lines" stroke="currentColor" strokeWidth="1.1">
-            <path d="M115 268 C190 268 215 274 320 274" />
-            <path d="M333 103 C333 164 320 205 320 274" />
-            <path d="M320 274 C415 274 444 250 525 250" />
-            <path d="M320 274 C320 342 397 357 397 445" />
-            <path d="M333 103 C470 92 535 150 525 250" />
-            <path d="M115 268 C120 390 258 466 397 445" />
+            {orbitPaths.map((d) => (
+              <path key={d} d={d} />
+            ))}
           </g>
           <g
             className="network-flow"
@@ -233,15 +246,14 @@ function AgentSystem() {
             strokeLinecap="round"
             strokeDasharray="6 320"
           >
-            <path d="M115 268 C190 268 215 274 320 274" />
-            <path d="M333 103 C333 164 320 205 320 274" />
-            <path d="M320 274 C415 274 444 250 525 250" />
-            <path d="M320 274 C320 342 397 357 397 445" />
+            {orbitPaths.map((d) => (
+              <path key={d} d={d} />
+            ))}
           </g>
-          <path d="M30 35h16m-8-8v16M594 520h16m-8-8v16" stroke="#777b6d" />
+          <path d="M30 620h16m-8-8v16M594 620h16m-8-8v16" stroke="#777b6d" />
           <text
             x="23"
-            y="526"
+            y="652"
             fill="#73776b"
             fontSize="9"
             fontFamily="monospace"
@@ -254,7 +266,7 @@ function AgentSystem() {
           return (
             <button
               key={item.id}
-              className={`agent-node ${i === 2 ? "core-node" : ""} ${selected === i ? "is-selected" : ""}`}
+              className={`agent-node ${i === 2 ? "core-node" : ""} ${item.y < 30 && i !== 2 ? "label-above" : ""} ${selected === i ? "is-selected" : ""}`}
               style={{ left: `${item.x}%`, top: `${item.y}%` }}
               onClick={() => setSelected(i)}
               aria-pressed={selected === i}
@@ -796,7 +808,16 @@ export function App() {
       </main>
       <footer className="footer">
         <a className="footer-wordmark" href="#inicio">
-          wd<span>↗</span>
+          <svg className="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="16" fill="#111210" />
+            <path
+              d="M12 24l6 20 7-13 7 13 6-20m12-10v30h-6a10 10 0 1 1 6-18"
+              fill="none"
+              stroke="#e6ff88"
+              strokeWidth="4"
+              strokeLinejoin="round"
+            />
+          </svg>
         </a>
         <span>© 2026 Willian Dantas</span>
         <a href="#inicio">
