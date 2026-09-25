@@ -399,18 +399,32 @@ summary {
 .network-lines {
   opacity: 0.22;
 }
-.network-flow {
-  opacity: 0.8;
-  animation: flow 9s linear infinite;
+/* Pulso único percorrendo a órbita; 1 unidade = 1% do caminho (pathLength=100).
+   O ciclo tem 120 unidades: a cabeça vai de 0 a 120, passando por cada nó
+   a cada 25 unidades (1.25s), sincronizado com o ping dos nós. */
+.network-flow path {
+  fill: none;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
-.network-flow path:nth-child(2) {
-  stroke-dashoffset: 90;
+.flow-head {
+  stroke-width: 2.4;
+  stroke-dasharray: 2 118;
+  animation-name: pulse-head;
 }
-.network-flow path:nth-child(3) {
-  stroke-dashoffset: 170;
+.flow-trail {
+  stroke-width: 1.6;
+  stroke-dasharray: 14 106;
+  opacity: 0.45;
+  animation-name: pulse-trail;
 }
-.network-flow path:nth-child(4) {
-  stroke-dashoffset: 240;
+.flow-glow {
+  stroke-width: 7;
+  stroke-dasharray: 10 110;
+  opacity: 0.35;
+  filter: blur(4px);
+  animation-name: pulse-glow;
 }
 .agent-node {
   position: absolute;
@@ -439,6 +453,17 @@ summary {
     border-color 0.3s,
     box-shadow 0.3s,
     transform 0.3s;
+}
+.node-icon::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  animation: node-ping 6s linear infinite;
+  animation-delay: calc(var(--i, 0) * 1.25s);
 }
 .node-label {
   position: absolute;
@@ -1407,6 +1432,44 @@ h2 {
 @keyframes flow {
   to {
     stroke-dashoffset: -650;
+  }
+}
+@keyframes pulse-head {
+  from {
+    stroke-dashoffset: 2;
+  }
+  to {
+    stroke-dashoffset: -118;
+  }
+}
+@keyframes pulse-trail {
+  from {
+    stroke-dashoffset: 14;
+  }
+  to {
+    stroke-dashoffset: -106;
+  }
+}
+@keyframes pulse-glow {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: -110;
+  }
+}
+@keyframes node-ping {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  16% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
   }
 }
 @keyframes orbit {
@@ -2412,6 +2475,9 @@ h2 {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+  .network-flow {
+    display: none;
   }
   .will-reveal {
     opacity: 1;

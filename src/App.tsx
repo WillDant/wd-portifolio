@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -51,13 +52,8 @@ const globeArcs: Arc[] = [
   { id: "sp-lon", from: saoPaulo, to: [51.5074, -0.1278] },
   { id: "sp-sf", from: saoPaulo, to: [37.7749, -122.4194] },
 ];
-// Arcos da órbita entre nós vizinhos (viewBox 640x660, centro 320,360, r 300)
-const orbitPaths = [
-  "M38.1 257.4A300 300 0 0 1 147.9 114.3",
-  "M147.9 114.3A300 300 0 0 1 320 60",
-  "M320 60A300 300 0 0 1 492.1 114.3",
-  "M492.1 114.3A300 300 0 0 1 601.9 257.4",
-];
+// Órbita contínua Contexto → Handoff (viewBox 640x660, centro 320,360, r 300)
+const orbitPath = "M38.1 257.4A300 300 0 0 1 601.9 257.4";
 const globeBase: [number, number, number] = [0.16, 0.18, 0.12];
 const globeAccent: [number, number, number] = [0.9, 1, 0.53];
 const globeGlow: [number, number, number] = [0.18, 0.21, 0.12];
@@ -234,21 +230,20 @@ function AgentSystem() {
             stroke="currentColor"
             strokeDasharray="2 12"
           />
-          <g className="network-lines" stroke="currentColor" strokeWidth="1.1">
-            {orbitPaths.map((d) => (
-              <path key={d} d={d} />
-            ))}
-          </g>
+          <path
+            className="network-lines"
+            d={orbitPath}
+            stroke="currentColor"
+            strokeWidth="1.1"
+          />
           <g
             className="network-flow"
             stroke="currentColor"
-            strokeWidth="2"
             strokeLinecap="round"
-            strokeDasharray="6 320"
           >
-            {orbitPaths.map((d) => (
-              <path key={d} d={d} />
-            ))}
+            <path className="flow-glow" d={orbitPath} pathLength={100} />
+            <path className="flow-trail" d={orbitPath} pathLength={100} />
+            <path className="flow-head" d={orbitPath} pathLength={100} />
           </g>
           <path d="M30 620h16m-8-8v16M594 620h16m-8-8v16" stroke="#777b6d" />
           <text
@@ -267,7 +262,13 @@ function AgentSystem() {
             <button
               key={item.id}
               className={`agent-node ${i === 2 ? "core-node" : ""} ${item.y < 30 && i !== 2 ? "label-above" : ""} ${selected === i ? "is-selected" : ""}`}
-              style={{ left: `${item.x}%`, top: `${item.y}%` }}
+              style={
+                {
+                  left: `${item.x}%`,
+                  top: `${item.y}%`,
+                  "--i": i,
+                } as CSSProperties
+              }
               onClick={() => setSelected(i)}
               aria-pressed={selected === i}
               aria-label={`Explorar ${item.label}`}
