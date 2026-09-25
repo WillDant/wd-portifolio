@@ -27,6 +27,8 @@ import {
   profile,
   technologies,
 } from "./content";
+import { Globe } from "./components/ui/cobe-globe";
+import type { Arc, Marker } from "./components/ui/cobe-globe";
 
 const navigation = [
   { id: "projetos", label: "Projetos" },
@@ -34,6 +36,24 @@ const navigation = [
   { id: "experiencia", label: "Experiência" },
 ];
 const icons = [AudioLines, Database, Network, Braces, GitBranch];
+
+const saoPaulo: [number, number] = [-23.5505, -46.6333];
+const globeMarkers: Marker[] = [
+  { id: "sp", location: saoPaulo, label: "São Paulo · Base" },
+  { id: "nyc", location: [40.7128, -74.006] },
+  { id: "lis", location: [38.7223, -9.1393] },
+  { id: "lon", location: [51.5074, -0.1278] },
+  { id: "sf", location: [37.7749, -122.4194] },
+];
+const globeArcs: Arc[] = [
+  { id: "sp-nyc", from: saoPaulo, to: [40.7128, -74.006] },
+  { id: "sp-lis", from: saoPaulo, to: [38.7223, -9.1393] },
+  { id: "sp-lon", from: saoPaulo, to: [51.5074, -0.1278] },
+  { id: "sp-sf", from: saoPaulo, to: [37.7749, -122.4194] },
+];
+const globeBase: [number, number, number] = [0.16, 0.18, 0.12];
+const globeAccent: [number, number, number] = [0.9, 1, 0.53];
+const globeGlow: [number, number, number] = [0.18, 0.21, 0.12];
 
 function useReveals() {
   useEffect(() => {
@@ -155,15 +175,6 @@ function Header() {
 function AgentSystem() {
   const [selected, setSelected] = useState(2);
   const node = agentNodes[selected];
-  const particles = Array.from({ length: 95 }, (_, i) => {
-    const angle = i * 2.399963;
-    const radius = 208 * Math.sqrt((i + 0.5) / 95);
-    return {
-      x: 320 + Math.cos(angle) * radius,
-      y: 287 + Math.sin(angle) * radius * 0.83,
-      opacity: 0.15 + (i % 4) * 0.12,
-    };
-  });
   return (
     <div className="agent-system">
       <div className="system-topline">
@@ -174,50 +185,31 @@ function AgentSystem() {
       </div>
       <div className={`system-canvas selected-${node.id}`}>
         <div className="system-glow" />
+        <div className="system-globe">
+          <Globe
+            markers={globeMarkers}
+            arcs={globeArcs}
+            baseColor={globeBase}
+            markerColor={globeAccent}
+            arcColor={globeAccent}
+            glowColor={globeGlow}
+            dark={1}
+            diffuse={1.2}
+            mapBrightness={6}
+            markerSize={0.03}
+            markerElevation={0.02}
+            arcWidth={0.6}
+            arcHeight={0.3}
+            speed={0.0025}
+            theta={0.25}
+          />
+        </div>
         <svg
           className="system-wires"
           viewBox="0 0 640 570"
           fill="none"
           aria-hidden="true"
         >
-          <defs>
-            <radialGradient id="sphere-fill">
-              <stop stopColor="#e6ff88" stopOpacity=".055" />
-              <stop offset="1" stopColor="#e6ff88" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <circle cx="320" cy="287" r="230" fill="url(#sphere-fill)" />
-          <g className="orbital-grid" stroke="currentColor" strokeWidth=".7">
-            <circle cx="320" cy="287" r="219" />
-            <ellipse
-              cx="320"
-              cy="287"
-              rx="219"
-              ry="87"
-              transform="rotate(-27 320 287)"
-            />
-            <ellipse
-              cx="320"
-              cy="287"
-              rx="105"
-              ry="219"
-              transform="rotate(-27 320 287)"
-            />
-            <ellipse
-              cx="320"
-              cy="287"
-              rx="177"
-              ry="219"
-              transform="rotate(-27 320 287)"
-            />
-            <ellipse
-              cx="320"
-              cy="287"
-              rx="219"
-              ry="170"
-              transform="rotate(-27 320 287)"
-            />
-          </g>
           <circle
             className="outer-orbit"
             cx="320"
@@ -226,16 +218,6 @@ function AgentSystem() {
             stroke="currentColor"
             strokeDasharray="2 12"
           />
-          {particles.map((p, i) => (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r={i % 7 === 0 ? 2 : 1}
-              fill="currentColor"
-              opacity={p.opacity}
-            />
-          ))}
           <g className="network-lines" stroke="currentColor" strokeWidth="1.1">
             <path d="M115 268 C190 268 215 274 320 274" />
             <path d="M333 103 C333 164 320 205 320 274" />
