@@ -214,7 +214,7 @@ function AgentSystem() {
             className="outer-orbit"
             cx="320"
             cy="287"
-            r="253"
+            r="278"
             stroke="currentColor"
             strokeDasharray="2 12"
           />
