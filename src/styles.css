@@ -862,8 +862,33 @@ h2 {
   left: 71.5%;
   top: 73.9%;
 }
-.mini-flow {
-  animation: flow 8s linear infinite;
+.mini-orbit {
+  position: absolute;
+  left: 49.6%;
+  top: 49.7%;
+  height: 52%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px dashed #363c2a;
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* Contexto → decisão → ação: o pulso entra no orquestrador e depois
+   sai para as três ferramentas ao mesmo tempo. */
+.mini-flow path {
+  stroke-dasharray: 10 200;
+  stroke-dashoffset: 10;
+  stroke-linecap: round;
+  animation: 4s linear infinite;
+}
+.mini-flow .mini-flow-in {
+  animation-name: mini-in;
+}
+.mini-flow .mini-flow-out {
+  animation-name: mini-out;
+}
+.mini-agent {
+  animation: mini-core 4s ease-out infinite;
 }
 .case:hover .case-art {
   border-color: #566341;
@@ -1456,6 +1481,46 @@ h2 {
   }
   to {
     stroke-dashoffset: -110;
+  }
+}
+@keyframes mini-in {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  45% {
+    stroke-dashoffset: -100;
+  }
+  45.1%,
+  100% {
+    stroke-dashoffset: -150;
+  }
+}
+@keyframes mini-out {
+  0%,
+  50% {
+    stroke-dashoffset: 10;
+  }
+  95% {
+    stroke-dashoffset: -100;
+  }
+  95.1%,
+  100% {
+    stroke-dashoffset: -150;
+  }
+}
+@keyframes mini-core {
+  0%,
+  40% {
+    box-shadow: 0 0 40px #bde4660e;
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px #e6ff8830,
+      0 0 50px #bde46630;
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 40px #bde4660e;
   }
 }
 @keyframes node-ping {
@@ -2476,7 +2541,8 @@ h2 {
     animation: none !important;
     transition: none !important;
   }
-  .network-flow {
+  .network-flow,
+  .mini-flow {
     display: none;
   }
   .will-reveal {

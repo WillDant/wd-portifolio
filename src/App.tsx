@@ -300,31 +300,40 @@ function AgentSystem() {
   );
 }
 
+// Usuário → Orquestrador, depois Orquestrador → RAG / Tools / Especialista
+const miniPaths = [
+  "M92 164H268",
+  "M268 164V88H386",
+  "M268 164H433",
+  "M268 164V244H386",
+];
+
 function CaseIllustration({ index }: { index: number }) {
   if (index === 0)
     return (
       <div className="case-art agent-art" aria-hidden="true">
         <div className="art-grid" />
         <div className="art-label">01 / ARQUITETURA MULTI-AGENTE</div>
+        <div className="mini-orbit" />
+        {/* Linhas de centro a centro: os nós (opacos) cobrem as pontas,
+            então encostam na borda em qualquer proporção do card. */}
         <svg viewBox="0 0 540 330" preserveAspectRatio="none" fill="none">
           <g stroke="#8c9b60" strokeWidth="1">
-            <path d="M92 164H210M268 148V88H386M268 182V244H386M305 164H433" />
+            {miniPaths.map((d) => (
+              <path key={d} d={d} vectorEffect="non-scaling-stroke" />
+            ))}
           </g>
-          <g
-            className="mini-flow"
-            stroke="#e6ff88"
-            strokeWidth="2"
-            strokeDasharray="4 155"
-          >
-            <path d="M92 164H210M268 148V88H386M268 182V244H386M305 164H433" />
+          <g className="mini-flow" stroke="#e6ff88" strokeWidth="2">
+            {miniPaths.map((d, i) => (
+              <path
+                key={d}
+                d={d}
+                pathLength={100}
+                className={i === 0 ? "mini-flow-in" : "mini-flow-out"}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
           </g>
-          <circle
-            cx="268"
-            cy="164"
-            r="86"
-            stroke="#363c2a"
-            strokeDasharray="2 6"
-          />
         </svg>
         <div className="mini-node mini-input">
           <AudioLines size={20} />
