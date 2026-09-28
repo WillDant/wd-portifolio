@@ -25,6 +25,7 @@ import {
   agentNodes,
   cases,
   experience,
+  labProjects,
   profile,
   technologies,
 } from "./content";
@@ -33,6 +34,7 @@ import type { Arc, Marker } from "./components/ui/cobe-globe";
 
 const navigation = [
   { id: "projetos", label: "Projetos" },
+  { id: "lab", label: "Lab" },
   { id: "sobre", label: "Sobre" },
   { id: "experiencia", label: "Experiência" },
 ];
@@ -176,7 +178,7 @@ function Header() {
           </a>
         ))}
         <a href="#contato" onClick={() => setOpen(false)}>
-          <span>04</span>Contato
+          <span>0{navigation.length + 1}</span>Contato
           <ArrowUpRight size={20} />
         </a>
       </nav>
@@ -519,12 +521,244 @@ function WorkSection() {
   );
 }
 
+// Sorteio: cada chip sai do bolo no centro (x0, y0) para a posição no time
+// (x1, y1), em % do campo. Um C, dois T e dois S por time.
+const grxPlayers = [
+  { tier: "S", team: "a", x0: 47, y0: 42, x1: 9, y1: 50 },
+  { tier: "T", team: "a", x0: 55, y0: 47, x1: 24, y1: 26 },
+  { tier: "T", team: "a", x0: 43, y0: 53, x1: 24, y1: 74 },
+  { tier: "C", team: "a", x0: 52, y0: 58, x1: 39, y1: 38 },
+  { tier: "S", team: "a", x0: 58, y0: 38, x1: 39, y1: 62 },
+  { tier: "S", team: "b", x0: 50, y0: 50, x1: 91, y1: 50 },
+  { tier: "T", team: "b", x0: 42, y0: 44, x1: 76, y1: 26 },
+  { tier: "T", team: "b", x0: 57, y0: 55, x1: 76, y1: 74 },
+  { tier: "C", team: "b", x0: 46, y0: 61, x1: 61, y1: 38 },
+  { tier: "S", team: "b", x0: 53, y0: 36, x1: 61, y1: 62 },
+];
+const grxLedger = [
+  ["#07", "PAGO"],
+  ["#12", "AGENDADO"],
+  ["#03", "CALOTE"],
+];
+// Planta simplificada de 2 dormitórios (viewBox 250x170)
+const formaWalls = [
+  "M4 4H246V166H4Z",
+  "M4 56H70M100 56H170",
+  "M80 56V96M80 124V166",
+  "M170 4V56M170 84V166",
+  "M170 78H246",
+];
+
+function FormaPlan({ layer }: { layer: number }) {
+  return (
+    <svg
+      className={`forma-layer layer-${layer}`}
+      viewBox="0 0 250 170"
+      fill="none"
+    >
+      {layer === 0 && (
+        <rect className="forma-room" x="81" y="57" width="88" height="108" />
+      )}
+      <g className="forma-walls" stroke="currentColor" strokeWidth="2">
+        {formaWalls.map((d) => (
+          <path key={d} d={d} pathLength={100} />
+        ))}
+      </g>
+      {layer === 0 && (
+        <>
+          <path className="forma-window" d="M108 166H142M246 110V140" />
+          <g className="forma-labels">
+            <text x="30" y="34">COZINHA</text>
+            <text x="190" y="44">BWC</text>
+            <text x="22" y="116">QUARTO</text>
+            <text x="112" y="116">SALA</text>
+            <text x="192" y="126">SUÍTE</text>
+          </g>
+        </>
+      )}
+    </svg>
+  );
+}
+
+function LabIllustration({ id }: { id: string }) {
+  if (id === "grxfut")
+    return (
+      <div className="lab-scene grx-scene" aria-hidden="true">
+        <div className="grx-pitch">
+          <svg viewBox="0 0 400 240" preserveAspectRatio="none" fill="none">
+            <g stroke="#8c9b60" strokeWidth="1">
+              <rect
+                x="1"
+                y="1"
+                width="398"
+                height="238"
+                vectorEffect="non-scaling-stroke"
+              />
+              <path d="M200 1V239" vectorEffect="non-scaling-stroke" />
+              <path
+                d="M1 70H50V170H1M399 70H350V170H399"
+                vectorEffect="non-scaling-stroke"
+              />
+            </g>
+          </svg>
+          <span className="grx-center" />
+          <span className="grx-team team-a">TIME A</span>
+          <span className="grx-team team-b">TIME B</span>
+          {grxPlayers.map((p, i) => (
+            <span
+              key={i}
+              className={`grx-chip team-${p.team}`}
+              style={
+                {
+                  "--x0": p.x0,
+                  "--y0": p.y0,
+                  "--x1": p.x1,
+                  "--y1": p.y1,
+                  "--j": i % 2 ? 1 : -1,
+                } as CSSProperties
+              }
+            >
+              {p.tier}
+            </span>
+          ))}
+        </div>
+        <div className="grx-ledger">
+          <span className="grx-ledger-title">CAIXA · PIX</span>
+          {grxLedger.map(([player, status], i) => (
+            <div
+              className={`grx-ledger-row status-${i}`}
+              key={player}
+              style={{ "--r": i } as CSSProperties}
+            >
+              <i />
+              <span>{player}</span>
+              <b>{status}</b>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  return (
+    <div className="lab-scene forma-scene" aria-hidden="true">
+      <div className="forma-versions">
+        {["v1", "v2", "v3"].map((v) => (
+          <span key={v} className={`forma-version ${v}`}>
+            {v}
+          </span>
+        ))}
+      </div>
+      <div className="forma-stage-wrap">
+        <div className="forma-stage">
+          {[0, 1, 2].map((layer) => (
+            <FormaPlan key={layer} layer={layer} />
+          ))}
+        </div>
+      </div>
+      <div className="forma-chat">
+        <span className="forma-prompt">›</span>
+        <span className="forma-typed">deixa a sala mais clara</span>
+        <i className="forma-caret" />
+      </div>
+    </div>
+  );
+}
+
+function LabSection() {
+  return (
+    <section id="lab" className="section lab-section">
+      <div className="section-heading" data-reveal>
+        <div>
+          <span className="eyebrow">
+            <span>02 /</span> LABORATÓRIO
+          </span>
+          <h2>
+            Fora do expediente,
+            <br />
+            <span className="serif-word">curiosidade.</span>
+          </h2>
+        </div>
+        <p>
+          Projetos pessoais, código aberto.
+          <br />
+          Onde testo ideias sem briefing.
+        </p>
+      </div>
+      <div className="lab-grid">
+        {labProjects.map((item, i) => (
+          <article
+            className="lab-card"
+            key={item.id}
+            data-reveal
+            style={{ "--d": i } as CSSProperties}
+            onPointerMove={(event) => {
+              const box = event.currentTarget.getBoundingClientRect();
+              event.currentTarget.style.setProperty(
+                "--mx",
+                `${event.clientX - box.left}px`,
+              );
+              event.currentTarget.style.setProperty(
+                "--my",
+                `${event.clientY - box.top}px`,
+              );
+            }}
+          >
+            <div className="lab-art case-art">
+              <div className="art-grid" />
+              <div className="lab-bar">
+                <span>~/repos/{item.id}</span>
+                <span>
+                  <i className="status-dot" /> main
+                </span>
+              </div>
+              <div className="art-label">{item.label}</div>
+              <LabIllustration id={item.id} />
+              <div className="art-footnote">
+                <span className="status-dot" /> {item.footnote}
+              </div>
+            </div>
+            <div className="lab-copy">
+              <div className="lab-repo">
+                <Github size={14} />
+                <span>{item.repo}</span>
+                <span>{item.language}</span>
+              </div>
+              <h3>
+                {item.title.split("\n").map((line, j) => (
+                  <span key={line}>
+                    {j > 0 && <br />}
+                    {line}
+                  </span>
+                ))}
+              </h3>
+              <p>{item.description}</p>
+              <div className="tags">
+                {item.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              <a
+                className="text-link"
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Ver repositório ${item.repo} no GitHub`}
+              >
+                Ver repositório <ArrowUpRight size={17} />
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function AboutSection() {
   return (
     <section id="sobre" className="section about-section">
       <div className="about-intro" data-reveal>
         <span className="eyebrow">
-          <span>02 /</span> SOBRE MIM
+          <span>03 /</span> SOBRE MIM
         </span>
         <h2>
           Entre a conversa
@@ -583,7 +817,7 @@ function ExperienceSection() {
       <div className="section-heading" data-reveal>
         <div>
           <span className="eyebrow">
-            <span>03 /</span> TRAJETÓRIA
+            <span>04 /</span> TRAJETÓRIA
           </span>
           <h2>
             Construindo,
@@ -675,7 +909,7 @@ function ContactSection() {
     <section id="contato" className="contact-section">
       <div className="contact-inner" data-reveal>
         <span className="eyebrow">
-          <span>04 /</span> PRÓXIMA CONVERSA
+          <span>05 /</span> PRÓXIMA CONVERSA
         </span>
         <div className="contact-heading">
           <h2>
@@ -812,6 +1046,7 @@ export function App() {
           <span>Do discovery à produção</span>
         </div>
         <WorkSection />
+        <LabSection />
         <AboutSection />
         <ExperienceSection />
         <ContactSection />

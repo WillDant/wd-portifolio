@@ -166,3 +166,30 @@ export const technologies = [
     ],
   },
 ];
+
+export const labProjects = [
+  {
+    id: "grxfut",
+    repo: "WillDant/grxfut",
+    url: "https://github.com/WillDant/grxfut",
+    language: "TypeScript",
+    label: "LAB / 01 · GESTÃO DE FUTEBOL",
+    title: "O fut do grupo,\nsem planilha.",
+    description:
+      "Webapp que organiza o futebol semanal: próximo jogo, confirmação de presença, pagamentos via PIX, caixa do grupo e sorteio de times equilibrado por tier.",
+    tags: ["Next.js", "Drizzle", "Neon Postgres"],
+    footnote: "PRESENÇA → PIX → SORTEIO",
+  },
+  {
+    id: "forma",
+    repo: "WillDant/Forma",
+    url: "https://github.com/WillDant/Forma",
+    language: "TypeScript",
+    label: "LAB / 02 · INTERIORES COM IA",
+    title: "Da planta\nà maquete.",
+    description:
+      "Editor local de interiores com planta 2D, maquete 3D e chat conectado ao Codex. Cada pedido vira uma operação validada e uma nova versão da cena.",
+    tags: ["React Three Fiber", "Fastify", "Codex"],
+    footnote: "PLANTA 2D → MAQUETE 3D → VERSÕES",
+  },
+];
