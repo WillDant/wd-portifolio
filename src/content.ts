@@ -9,6 +9,20 @@ export const profile = {
   resume: "/willian-dantas-curriculo.pdf",
 };
 
+export const chat = {
+  endpoint:
+    "https://primary-production-9eb5e.up.railway.app/webhook/portfolio-chat",
+  maxLength: 500,
+  welcome:
+    "Oi! Sou o assistente do Willian. Pergunte sobre a carreira, os projetos ou as tecnologias com que ele trabalha.",
+  suggestions: [
+    "O que você faz na Fintalk?",
+    "Com quais tecnologias trabalha?",
+    "Me conta sobre um projeto",
+    "Como falar com você?",
+  ],
+};
+
 export const agentNodes = [
   {
     id: "context",

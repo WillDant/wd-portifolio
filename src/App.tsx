@@ -29,6 +29,7 @@ import {
   profile,
   technologies,
 } from "./content";
+import { ChatWidget } from "./components/ChatWidget";
 import { Globe } from "./components/ui/cobe-globe";
 import type { Arc, Marker } from "./components/ui/cobe-globe";
 
@@ -1069,6 +1070,7 @@ export function App() {
           DE VOLTA AO TOPO <ChevronDown size={14} />
         </a>
       </footer>
+      <ChatWidget />
     </>
   );
 }
